@@ -18,8 +18,9 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'enableSession' => 'false',
+            //'enableAutoLogin' => true,
+            //'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -37,14 +38,31 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'doctor',
+                    'except' => ['view', 'create', 'update', 'delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'user',
+                    'except' => ['index', 'view', 'update', 'delete'],
+                    'extraPatterns' => [
+                        'POST authorize' => 'authorize',
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'time-slot',
+                    'only' => ['index', 'create', 'delete', 'options'],
+                ]
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
