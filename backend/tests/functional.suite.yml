@@ -2,4 +2,14 @@ suite_namespace: backend\tests\functional
 actor: FunctionalTester
 modules:
     enabled:
-        - Yii2
+        - Filesystem
+        - Yii2:
+            configFile: ./config/test.php
+        - DataFactory:
+            factories: tests/functional/factory
+            depends: Yii2
+            cleanup: false
+        - REST:
+            depends: Yii2
+            url: '/'
+        - Asserts
