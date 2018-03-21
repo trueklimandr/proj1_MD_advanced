@@ -43,6 +43,9 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Signup', 'url' => ['/main/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/main/login']];
     } else {
+        if (Yii::$app->user->identity->type == 'doctor') {
+            $menuItems[] = ['label' => 'Slots', 'url' => ['/main/index-slots']];
+        }
         $menuItems[] = ['label' => 'Record', 'url' => ['/main/record']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/main/logout'], 'post')

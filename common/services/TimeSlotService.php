@@ -42,8 +42,7 @@ class TimeSlotService
     {
         $identity = Yii::$app->user->identity;
         if ($identity != null) {
-            $doctor = Doctor::find()->where(['userId' => $identity->getId()])->one();
-            if ($value != $doctor['doctorId']) {
+            if ($value != $identity->doctor->doctorId) {
                 return false;
             }
             return true;

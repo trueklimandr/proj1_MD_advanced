@@ -41,7 +41,8 @@ class MainController extends Controller
                             'about',
                             'record',
                             'get-slots',
-                            'add-slots'
+                            'index-slots',
+                            'add-slot'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -162,8 +163,29 @@ class MainController extends Controller
         return JSON::encode($timeSlots);
     }
 
-    public function actionAddSlots()
+    public function actionIndexSlots()
     {
+        $doctor = Yii::$app->user->identity->doctor;
+        $timeSlots = TimeSlot::find()
+            ->where('doctorId='.$doctor->doctorId)
+            ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+            ->all();
+        return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
+    }
 
+    public function actionAddSlot()
+    {
+        $timeSlot = new TimeSlot();
+        $doctor = Yii::$app->user->identity->doctor;
+        if ($timeSlot->load(Yii::$app->request->post())) {
+            if ($timeSlot->save()) {
+                $timeSlots = TimeSlot::find()
+                    ->where('doctorId='.$doctor->doctorId)
+                    ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+                    ->all();
+                return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
+            }
+        }
+        return $this->render('add-slot', ['timeSlot' => $timeSlot, 'doctorId' => $doctor->doctorId]);
     }
 }
