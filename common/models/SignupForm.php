@@ -1,19 +1,21 @@
 <?php
-namespace frontend\models;
+/**
+ * Created by PhpStorm.
+ * User: klimandr
+ * Date: 20.03.18
+ * Time: 15:54
+ */
+
+namespace common\models;
 
 use yii\base\Model;
-use common\models\User;
 
-/**
- * Signup form
- */
 class SignupForm extends Model
 {
     public $firstName;
     public $lastName;
     public $email;
     public $password;
-
 
     /**
      * {@inheritdoc}
@@ -43,23 +45,21 @@ class SignupForm extends Model
     /**
      * Signs user up.
      *
-     * @return User|null the saved model or null if saving fails
+     * @return bool|User
      */
-    public function signup()
+    public function Signup()
     {
         if (!$this->validate()) {
-            return null;
+            return false;
         }
-        
+
         $user = new User();
         $user->firstName = $this->firstName;
         $user->lastName = $this->lastName;
         $user->email = $this->email;
         $user->password = $this->password;
         $user->type = 'user';
-//        $user->setPassword($this->password);
-//        $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
+
+        return ($user->save()) ? $user : false;
     }
 }

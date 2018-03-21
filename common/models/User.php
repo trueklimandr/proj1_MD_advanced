@@ -73,6 +73,16 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(AccessToken::class, ['userId' => 'userId']);
     }
 
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]); //, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public function validatePassword($password)
+    {
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
     /**
      * @param mixed $token
      * @param null $type
@@ -94,7 +104,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id)
     {
-        // TODO: Implement findIdentity() method.
+        return static::findOne($id);
     }
 
     public function getAuthKey()
