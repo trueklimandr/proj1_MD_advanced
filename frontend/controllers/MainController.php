@@ -35,7 +35,14 @@ class MainController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'logout', 'about', 'get-slots', 'record', 'get-slots'],
+                        'actions' => [
+                            'index',
+                            'logout',
+                            'about',
+                            'record',
+                            'get-slots',
+                            'add-slots'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -153,5 +160,10 @@ class MainController extends Controller
             ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
             ->all();
         return JSON::encode($timeSlots);
+    }
+
+    public function actionAddSlots()
+    {
+
     }
 }
