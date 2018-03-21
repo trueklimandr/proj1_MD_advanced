@@ -11,11 +11,45 @@ namespace frontend\controllers;
 use common\models\Doctor;
 use common\models\LoginForm;
 use common\models\SignupForm;
+use common\models\TimeSlot;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\Controller;
 
 class MainController extends Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'login', 'about', 'signup'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['index', 'logout', 'about', 'get-slots', 'record', 'get-slots'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     /**
      * Displays homepage.
      *
@@ -103,5 +137,21 @@ class MainController extends Controller
     {
         $doctors = Doctor::findBySql('SELECT * FROM doctor INNER JOIN user ON doctor.userId = user.userId ORDER BY lastName')->all();
         return $this->render('record', ['doctors' => $doctors]);
+    }
+
+    /**
+     * @return null|string list of timeSlots in JSON
+     */
+    public function actionGetSlots()
+    {
+        if (Yii::$app->user->isGuest) {
+            return null;
+        }
+        $doctorId = Yii::$app->request->get('doctorId');
+        $timeSlots = TimeSlot::find()
+            ->where('doctorId='.$doctorId)
+            ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+            ->all();
+        return JSON::encode($timeSlots);
     }
 }
