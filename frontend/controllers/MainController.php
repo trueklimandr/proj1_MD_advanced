@@ -12,6 +12,7 @@ use common\models\Doctor;
 use common\models\LoginForm;
 use common\models\SignupForm;
 use common\models\TimeSlot;
+use http\Exception;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -165,7 +166,9 @@ class MainController extends Controller
 
     public function actionIndexSlots()
     {
-        $doctor = Yii::$app->user->identity->doctor;
+        if (!$doctor = Yii::$app->user->identity->doctor) {
+            return '<h1>Error. No access.</h1><br>Please, log in as a doctor.';
+        }
         $timeSlots = TimeSlot::find()
             ->where('doctorId='.$doctor->doctorId)
             ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
