@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 
 /**
  * Class Doctor for table doctor
- * @package app\models
+ * @package common\models
  * @property int $doctorId
  * @property int $userId
  * @property string $specialization
