@@ -14,6 +14,7 @@ use yii;
 
 /**
  * Class TimeSlot for table timeSlot
+ * TimeSlot describes the time of the doctor's appointment
  * @package app\models
  * @property int $id
  * @property int $doctorId
@@ -60,6 +61,11 @@ class TimeSlot extends ActiveRecord
         return $this->hasOne(Doctor::class, ['doctorId' => 'doctorId']);
     }
 
+    /**
+     * Date must be not in the past
+     * @param $attribute string with date must be a validating date
+     * @param $params
+     */
     public function validateDate($attribute, $params)
     {
         if (strtotime($this->$attribute) < strtotime('today')) {
@@ -67,6 +73,11 @@ class TimeSlot extends ActiveRecord
         }
     }
 
+    /**
+     * Check right position of start and end of a timeslot
+     * @param $attribute string with start or end
+     * @param $params
+     */
     public function validateSlot($attribute, $params)
     {
         if (!$this->timeSlotService->isStartBeforeEnd($this->start, $this->end)) {
@@ -77,6 +88,11 @@ class TimeSlot extends ActiveRecord
         }
     }
 
+    /**
+     * Check doctorId for its owner and for its existence
+     * @param $attribute string with doctorId
+     * @param $params
+     */
     public function validateDoctor($attribute, $params)
     {
         if (!$this->timeSlotService->isValidDoctor($this->$attribute)) {

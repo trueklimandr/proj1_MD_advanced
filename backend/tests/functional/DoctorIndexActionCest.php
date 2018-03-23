@@ -17,8 +17,7 @@ class DoctorIndexActionCest extends BaseFunctionalCest
 {
     public function testGettingListOfZeroDocs(FunctionalTester $I)
     {
-        $I->have(AccessToken::class);
-        $accessToken = AccessToken::find()->one();
+        $accessToken = $I->have(AccessToken::class);
         $I->amHttpAuthenticated($accessToken['token'], '');
         $I->sendGET('doctors');
         $I->seeResponseCodeIs(200);
@@ -27,17 +26,16 @@ class DoctorIndexActionCest extends BaseFunctionalCest
         $I->assertEquals(0, count($response));
     }
 
-    public function testGettingListOfFiveDocs(FunctionalTester $I)
+    public function testGettingListOfThreeDocs(FunctionalTester $I)
     {
-        $I->have(AccessToken::class);
-        $accessToken = AccessToken::find()->one();
+        $accessToken = $I->have(AccessToken::class);
         $I->amHttpAuthenticated($accessToken['token'], '');
-        $I->haveMultiple(Doctor::class, 5);
+        $I->haveMultiple(Doctor::class, 3);
         $I->sendGET('doctors');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
-        $I->assertEquals(5, count($response));
+        $I->assertEquals(3, count($response));
         sleep(7);
         $I->seeResponseMatchesJsonType([
             'doctorId' => 'integer',
