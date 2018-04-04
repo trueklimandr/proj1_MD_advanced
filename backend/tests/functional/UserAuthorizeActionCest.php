@@ -41,6 +41,37 @@ class UserAuthorizeActionCest extends BaseFunctionalCest
             ]);
     }
 
+    public function testRepeatedAuthorize(FunctionalTester $I)
+    {
+        $I->have(User::class, [
+            'firstName' => 'Dmitry',
+            'lastName'  => 'Kozlov',
+            'email' => 'd.kozlov@mail.ru',
+            'password' => 'parol-karol',
+            'type' => 'user',
+        ]);
+        $I->sendPOST('users/authorize', [
+            'email' => 'd.kozlov@mail.ru',
+            'password' => 'parol-karol'
+        ]);
+        $I->seeResponseCodeIs(201);
+        $I->sendPOST('users/authorize', [
+            'email' => 'd.kozlov@mail.ru',
+            'password' => 'parol-karol'
+        ]);
+        $I->seeResponseCodeIs(201);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'token' => 'string',
+            'userId' => 'integer'
+        ]);
+        $response = json_decode($I->grabResponse());
+        $I->seeRecord(AccessToken::class, [
+            'userId' => $response->userId,
+            'token' => $response->token
+        ]);
+    }
+
     public function testAuthorizeByWrongUser(FunctionalTester $I)
     {
         $I->have(User::class, [

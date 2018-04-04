@@ -10,6 +10,10 @@ use League\FactoryMuffin\Faker\Facade as Faker;
 use common\models\TimeSlot;
 use common\models\Doctor;
 
+/**
+ * !!!for this factory haveMultiple() will cause an error sooner or later!!!
+ * just use have() only
+ */
 $fm->define(TimeSlot::class)->setDefinitions([
     'doctorId' => function (TimeSlot $model) use ($fm) {
         $doctor = $fm->create(Doctor::class);

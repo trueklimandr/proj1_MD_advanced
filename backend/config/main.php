@@ -59,7 +59,10 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'time-slot',
-                    'only' => ['index', 'create', 'delete', 'options'],
+                    'only' => ['create', 'delete', 'list'],
+                    'extraPatterns' => [
+                        'GET' => 'list',
+                    ]
                 ]
             ],
         ],

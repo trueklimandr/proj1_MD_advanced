@@ -13,6 +13,7 @@ use common\models\TimeSlot;
 use backend\tests\functional\baseCest\BaseFunctionalCest;
 use common\models\AccessToken;
 use common\models\Doctor;
+use common\models\User;
 
 class DoctorAddTimeSlotActionCest extends BaseFunctionalCest
 {
@@ -89,6 +90,21 @@ class DoctorAddTimeSlotActionCest extends BaseFunctionalCest
         $I->amHttpAuthenticated($accessToken->token, '');
         $I->sendPOST('time-slots', [
             'doctorId' => $doctor2->doctorId,
+            'date' => date('Y-m-d', strtotime('tomorrow')),
+            'start' => '08:00:00',
+            'end' => '15:00:00'
+        ]);
+        $I->seeResponseCodeIs(422);
+    }
+
+    public function testAddValidTimeSlotByUser(FunctionalTester $I)
+    {
+        $doctor = $I->have(Doctor::class);
+        $user = $I->have(User::class);
+        $accessToken = $I->have(AccessToken::class, ['userId' => $user->userId]);
+        $I->amHttpAuthenticated($accessToken->token, '');
+        $I->sendPOST('time-slots', [
+            'doctorId' => $doctor->doctorId,
             'date' => date('Y-m-d', strtotime('tomorrow')),
             'start' => '08:00:00',
             'end' => '15:00:00'
