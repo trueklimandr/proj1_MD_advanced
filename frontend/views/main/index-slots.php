@@ -39,10 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::a(
                 'Delete',
                 Url::to(['main/delete-slot', 'id' => $timeSlot->id],true),
-                ['class' => 'btn btn-lg btn-danger']);
+                ['class' => 'btn btn-lg btn-danger']
+            );
             echo Html::button(
                 'Cancel',
-                ['class' => 'btn btn-lg btn-default pull-right', 'data-dismiss' => 'modal']);
+                ['class' => 'btn btn-lg btn-default pull-right', 'data-dismiss' => 'modal']
+            );
 
             Modal::end();
             ?>
@@ -50,4 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php endforeach; ?>
 </ul>
 <h3>To add new slot, push the button</h3>
-<?= Html::a('Add', Url::to(['main/add-slot'], true), ['class' => 'btn btn-lg btn-success']) ?>
+<?= Html::a(
+        'Add',
+        Url::to(['main/add-slot', 'crumbs' => $this->title, 'crumbsURL' => '/main/index-slots'], true),
+        ['class' => 'btn btn-lg btn-success']
+) ?>

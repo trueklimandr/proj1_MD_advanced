@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Add slot';
+$this->params['breadcrumbs'][] = ['label' => $crumbs['crumbs'], 'url' => $crumbs['crumbsURL']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

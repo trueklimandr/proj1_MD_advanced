@@ -203,7 +203,11 @@ class MainController extends Controller
                 return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
             }
         }
-        return $this->render('add-slot', ['timeSlot' => $timeSlot, 'doctorId' => $doctor->doctorId]);
+        return $this->render('add-slot', [
+            'timeSlot' => $timeSlot,
+            'doctorId' => $doctor->doctorId,
+            'crumbs' => Yii::$app->request->get()
+        ]);
     }
 
     public function actionDeleteSlot()
