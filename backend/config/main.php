@@ -67,11 +67,7 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'record',
-                    'only' => ['list', 'make'],
-                    'extraPatterns' => [
-                        'GET' => 'list',
-                        'POST' => 'make'
-                    ]
+                    'only' => ['create', 'index'],
                 ]
             ],
         ],

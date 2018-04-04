@@ -26,6 +26,11 @@ class TimeSlot extends ActiveRecord
 {
     private $timeSlotService;
 
+    /**
+     * connects a service for farther data verification
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\di\NotInstantiableException
+     */
     public function init()
     {
         parent::init();
