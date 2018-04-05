@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($timeSlot, 'doctorId')
         ->textInput(['value' => $doctorId, 'readonly' => 'readonly']) ?>
     <?= $form->field($timeSlot, 'date')
-        ->input('date', ['value' => date('Y-m-d', strtotime('today'))]) ?>
+        ->input('text', ['value' => date('Y-m-d', strtotime('today'))]) ?>
     <?= $form->field($timeSlot, 'start')->input('time', ['value' => '08:00:00']) ?>
     <?= $form->field($timeSlot, 'end')->input('time', ['value' => '12:00:00']) ?>
     <?= Html::submitButton('Add slot', ['class'=> 'btn btn-success']) ?>

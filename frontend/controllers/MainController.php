@@ -17,6 +17,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\HttpException;
 
 class MainController extends Controller
 {
@@ -168,11 +169,12 @@ class MainController extends Controller
     /**
      * Shows a list of existing slots for current (logged in) doctor
      * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
      */
     public function actionIndexSlots()
     {
         if (!$doctor = Yii::$app->user->identity->doctor) {
-            return '<h1>Error. No access.</h1><br>Please, log in as a doctor.';
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
         }
 
         $timeSlots = TimeSlot::find()
@@ -183,17 +185,17 @@ class MainController extends Controller
     }
 
     /**
-     * Call a form to add a new timeslot and then shows updated list of slots
+     * Calls a form to add a new timeslot and then shows updated list of slots
      * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
      */
     public function actionAddSlot()
     {
         if (!$doctor = Yii::$app->user->identity->doctor) {
-            return '<h1>Error. No access.</h1><br>Please, log in as a doctor.';
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
         }
 
         $timeSlot = new TimeSlot();
-        $doctor = Yii::$app->user->identity->doctor;
         if ($timeSlot->load(Yii::$app->request->post())) {
             if ($timeSlot->save()) {
                 $timeSlots = TimeSlot::find()
@@ -210,13 +212,17 @@ class MainController extends Controller
         ]);
     }
 
+    /**
+     * Deletes specified slot and shows updated list of slots
+     * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
+     */
     public function actionDeleteSlot()
     {
         if (!$doctor = Yii::$app->user->identity->doctor) {
-            return '<h1>Error. No access.</h1><br>Please, log in as a doctor.';
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
         }
 
-        $doctor = Yii::$app->user->identity->doctor;
         if ($targetId = Yii::$app->request->get('id')) {
             TimeSlot::deleteAll(['id' => $targetId]);
             $timeSlots = TimeSlot::find()
