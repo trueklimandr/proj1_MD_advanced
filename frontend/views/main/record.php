@@ -25,16 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <h3>Available slots for
                                     <?= $doctor->user->lastName . ' ' .
                                         $doctor->user->firstName?></h3>
-                                <div id="slotDate<?= $doctor->doctorId ?>" class="col-md-4"></div>
-                                <div id="slotStart<?= $doctor->doctorId ?>" class="col-md-3"></div>
-                                <div id="slotEnd<?= $doctor->doctorId ?>" class="col-md-3"></div>
-                                <div id="slotChoose<?= $doctor->doctorId ?>" class="col-md-2"></div>
-                                <p id="chooseone<?= $doctor->doctorId ?>"></p>
+                                <div id="table<?=$doctor->doctorId?>"></div>
                                 <div id="error<?= $doctor->doctorId ?>"></div>
                                 <div>
-                                    <button id="cancel<?= $doctor->doctorId ?>"
-                                            class="btn btn-default">
-                                        Cancel</button>
+                                    <button id="cancel<?= $doctor->doctorId ?>" class="btn btn-danger">Cancel</button>
                                 </div>
                             </dialog>
                         </div>
