@@ -44,7 +44,8 @@ class MainController extends Controller
                             'get-slots',
                             'index-slots',
                             'add-slot',
-                            'delete-slot'
+                            'delete-slot',
+                            'choose-record'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -231,5 +232,18 @@ class MainController extends Controller
                 ->all();
             return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
         }
+    }
+
+    public function actionChooseRecord()
+    {
+        if ($slotId = Yii::$app->request->get('slotId')) {
+            $slot = TimeSlot::find()
+                ->where('id='.$slotId)
+                ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+                ->all();
+            $diff = $slot->end - $slot->start;
+            return $this->render('choose-record', ['timeSlots' => $slot]);
+        }
+        throw new HttpException(400, 'SlotId is undefined.');
     }
 }

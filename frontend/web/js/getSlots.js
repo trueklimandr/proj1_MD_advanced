@@ -44,7 +44,7 @@ function showTimeDialog(docId) {
                     return;
                 }
 
-                block = '<table class="table">\n<thead>\n<tr><th>Date</th><th>Time</th></tr>\n</thead>\n<tbody>\n';
+                block = '<table class="table">\n<thead>\n<tr><th>Date</th><th>Time</th><th></th></tr>\n</thead>\n<tbody>\n';
 
                 response.forEach(function(item, i, response) {
                     block +=
