@@ -51,8 +51,9 @@ function showTimeDialog(docId) {
                         '<tr><td>' + item['date'] + '</td><td>' + item['start'] + ' - ' + item['end'] + '</td>' +
                         '<td><a' +
                             ' class="btn btn-xs btn-success"' +
-                            ' href="' + window.location.protocol + '//' + window.location.hostname +
-                                '/main/choose-record?slotId=' + item['id'] + '"' +
+                            ' href=""' +
+                            // ' href="' + window.location.protocol + '//' + window.location.hostname +
+                            //     '/main/choose-record?slotId=' + item['id'] + '"' +
                         '>record</a></td></tr>\n';
                 });
 
@@ -62,7 +63,7 @@ function showTimeDialog(docId) {
                 tableDiv.innerHTML = block;
 
             } else {
-                errDiv.innerHTML = 'Произошла ошибка при запросе: ' +  request.status + ' ' + request.statusText;
+                errDiv.innerHTML = 'An error occurred while requesting: ' +  request.status + ' ' + request.statusText;
             }
         }
     };
