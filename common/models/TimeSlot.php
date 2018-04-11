@@ -15,7 +15,7 @@ use yii;
 /**
  * Class TimeSlot for table timeSlot
  * TimeSlot describes the time of the doctor's appointment
- * @package app\models
+ * @package common\models
  * @property int $id
  * @property int $doctorId
  * @property string $date is a date of timeSlot
@@ -26,6 +26,11 @@ class TimeSlot extends ActiveRecord
 {
     private $timeSlotService;
 
+    /**
+     * connects a service for farther data verification
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\di\NotInstantiableException
+     */
     public function init()
     {
         parent::init();
@@ -48,6 +53,7 @@ class TimeSlot extends ActiveRecord
             [['doctorId', 'date', 'start', 'end'], 'required'],
             ['date', 'validateDate'],
             ['start', 'validateSlot'],
+            ['end', 'validateSlot'],
             ['doctorId', 'validateDoctor']
         ];
     }

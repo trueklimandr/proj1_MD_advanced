@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Add slot';
+$this->params['breadcrumbs'][] = ['label' => $crumbs['crumbs'], 'url' => $crumbs['crumbsURL']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,10 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>Please fill out the following fields to add slot</p>
 
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($timeSlot, 'doctorId')->dropDownList([$doctorId => $doctorId]) ?>
-    <?= $form->field($timeSlot, 'date') ?>
-    <?= $form->field($timeSlot, 'start') ?>
-    <?= $form->field($timeSlot, 'end') ?>
+    <?= $form->field($timeSlot, 'doctorId')
+        ->textInput(['value' => $doctorId, 'readonly' => 'readonly']) ?>
+    <?= $form->field($timeSlot, 'date')
+        ->input('text', ['value' => date('Y-m-d', strtotime('today'))]) ?>
+    <?= $form->field($timeSlot, 'start')->input('time', ['value' => '08:00:00']) ?>
+    <?= $form->field($timeSlot, 'end')->input('time', ['value' => '12:00:00']) ?>
     <?= Html::submitButton('Add slot', ['class'=> 'btn btn-success']) ?>
     <?php ActiveForm::end(); ?>
 

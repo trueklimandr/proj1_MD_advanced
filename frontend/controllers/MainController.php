@@ -12,12 +12,12 @@ use common\models\Doctor;
 use common\models\LoginForm;
 use common\models\SignupForm;
 use common\models\TimeSlot;
-use http\Exception;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\HttpException;
 
 class MainController extends Controller
 {
@@ -43,11 +43,13 @@ class MainController extends Controller
                             'record',
                             'get-slots',
                             'index-slots',
-                            'add-slot'
+                            'add-slot',
+                            'delete-slot',
+                            'choose-record'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -156,6 +158,7 @@ class MainController extends Controller
         if (Yii::$app->user->isGuest) {
             return null;
         }
+
         $doctorId = Yii::$app->request->get('doctorId');
         $timeSlots = TimeSlot::find()
             ->where('doctorId='.$doctorId)
@@ -164,11 +167,17 @@ class MainController extends Controller
         return JSON::encode($timeSlots);
     }
 
+    /**
+     * Shows a list of existing slots for current (logged in) doctor
+     * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
+     */
     public function actionIndexSlots()
     {
         if (!$doctor = Yii::$app->user->identity->doctor) {
-            return '<h1>Error. No access.</h1><br>Please, log in as a doctor.';
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
         }
+
         $timeSlots = TimeSlot::find()
             ->where('doctorId='.$doctor->doctorId)
             ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
@@ -176,10 +185,18 @@ class MainController extends Controller
         return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
     }
 
+    /**
+     * Calls a form to add a new timeslot and then shows updated list of slots
+     * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
+     */
     public function actionAddSlot()
     {
+        if (!$doctor = Yii::$app->user->identity->doctor) {
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
+        }
+
         $timeSlot = new TimeSlot();
-        $doctor = Yii::$app->user->identity->doctor;
         if ($timeSlot->load(Yii::$app->request->post())) {
             if ($timeSlot->save()) {
                 $timeSlots = TimeSlot::find()
@@ -189,6 +206,44 @@ class MainController extends Controller
                 return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
             }
         }
-        return $this->render('add-slot', ['timeSlot' => $timeSlot, 'doctorId' => $doctor->doctorId]);
+        return $this->render('add-slot', [
+            'timeSlot' => $timeSlot,
+            'doctorId' => $doctor->doctorId,
+            'crumbs' => Yii::$app->request->get()
+        ]);
+    }
+
+    /**
+     * Deletes specified slot and shows updated list of slots
+     * @return string
+     * @throws HttpException if user is logged in as not doctor or not logged in at all
+     */
+    public function actionDeleteSlot()
+    {
+        if (!$doctor = Yii::$app->user->identity->doctor) {
+            throw new HttpException(401, 'No access. Please, log in as a doctor.');
+        }
+
+        if ($targetId = Yii::$app->request->get('id')) {
+            TimeSlot::deleteAll(['id' => $targetId]);
+            $timeSlots = TimeSlot::find()
+                ->where('doctorId='.$doctor->doctorId)
+                ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+                ->all();
+            return $this->render('index-slots', ['timeSlots' => $timeSlots, 'doctor' => $doctor]);
+        }
+    }
+
+    public function actionChooseRecord()
+    {
+        if ($slotId = Yii::$app->request->get('slotId')) {
+            $slot = TimeSlot::find()
+                ->where('id='.$slotId)
+                ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+                ->all();
+            $diff = $slot->end - $slot->start;
+            return $this->render('choose-record', ['timeSlots' => $slot]);
+        }
+        throw new HttpException(400, 'SlotId is undefined.');
     }
 }

@@ -63,6 +63,11 @@ return [
                     'extraPatterns' => [
                         'GET' => 'list',
                     ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'record',
+                    'only' => ['create', 'index'],
                 ]
             ],
         ],

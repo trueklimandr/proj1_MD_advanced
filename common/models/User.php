@@ -14,7 +14,7 @@ use yii\web\IdentityInterface;
 
 /**
  * Class Doctor for table doctor
- * @package app\models
+ * @package common\models
  * @property int $userId
  * @property string $firstName
  * @property string $lastName

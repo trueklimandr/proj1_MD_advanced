@@ -17,12 +17,14 @@ function getXmlHttp(){
 
 function showTimeDialog(docId) {
 
-    var request = getXmlHttp();
+    var request, dialog, errDiv, response, block, tableDiv;
+
+    request = getXmlHttp();
     request.open('Get', '/main/get-slots?doctorId=' + docId);
     request.send();
 
-    var dialog = document.getElementById('dialog'+docId);
-    var errDiv = document.getElementById('error'+docId);
+    dialog = document.getElementById('dialog'+docId);
+    errDiv = document.getElementById('error'+docId);
 
     dialog.showModal();
 
@@ -33,33 +35,31 @@ function showTimeDialog(docId) {
     request.onreadystatechange = function() {
         if(request.readyState === 4) {
             if(request.status === 200) {
-                var response = JSON.parse(request.responseText);
+
+
+                response = JSON.parse(request.responseText);
 
                 if (response.length === 0) {
                     errDiv.innerHTML = '<h3 style="color:red">Sorry, there is no slots.</h3>';
                     return;
                 }
-                var slotDate = document.getElementById('slotDate'+docId);
-                var slotStart = document.getElementById('slotStart'+docId);
-                var slotEnd = document.getElementById('slotEnd'+docId);
-                var slotChoose = document.getElementById('slotChoose'+docId);
+
+                block = '<table class="table">\n<thead>\n<tr><th>Date</th><th>Time</th><th></th></tr>\n</thead>\n<tbody>\n';
 
                 response.forEach(function(item, i, response) {
-                    var divDate = document.createElement('div');
-                    divDate.innerText = item['date'];
-                    var divStart = document.createElement('div');
-                    divDate.innerText = item['start'];
-                    var divEnd = document.createElement('div');
-                    divDate.innerText = item['end'];
-                    var divChoose = document.createElement('button');
-                    divChoose.innerText = item['Record'];
-                    divChoose.id = 'choose'+item['doctorId'];
-
-                    slotDate.appendChild(divDate);
-                    slotStart.appendChild(divStart);
-                    slotEnd.appendChild(divEnd);
-                    slotChoose.appendChild(divChoose);
+                    block +=
+                        '<tr><td>' + item['date'] + '</td><td>' + item['start'] + ' - ' + item['end'] + '</td>' +
+                        '<td><a' +
+                            ' class="btn btn-xs btn-success"' +
+                            ' href="' + window.location.protocol + '//' + window.location.hostname +
+                                '/main/choose-record?slotId=' + item['id'] + '"' +
+                        '>record</a></td></tr>\n';
                 });
+
+                block += '</tbody>\n</table>';
+
+                tableDiv = document.getElementById('table'+docId);
+                tableDiv.innerHTML = block;
 
             } else {
                 errDiv.innerHTML = 'Произошла ошибка при запросе: ' +  request.status + ' ' + request.statusText;

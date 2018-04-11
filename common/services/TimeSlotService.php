@@ -26,7 +26,7 @@ class TimeSlotService
 
     /**
      * @param TimeSlot $timeSlot
-     * @return bool true if there is confluence with new timeslot
+     * @return bool true if there is confluence with a new timeslot
      */
     public function isConfluence(TimeSlot $timeSlot):bool
     {

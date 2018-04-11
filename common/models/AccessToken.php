@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
 
 /**
  * Class AccessToken for table accessToken
- * @package app\models
+ * @package common\models
  * @property string $token
  * @property int $userId
  */

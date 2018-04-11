@@ -9,6 +9,7 @@
 namespace backend\tests\functional;
 
 use backend\tests\FunctionalTester;
+use Codeception\Example;
 use common\models\TimeSlot;
 use backend\tests\functional\baseCest\BaseFunctionalCest;
 use common\models\AccessToken;
@@ -48,7 +49,7 @@ class DoctorAddTimeSlotActionCest extends BaseFunctionalCest
      * @example(start2="08:00:00", start1="09:00:00", end2="10:00:00", end1="11:00:00", code="422")
      * @example(start2="08:00:00", end2="09:00:00", start1="10:00:00", end1="11:00:00", code="201")
      */
-    public function testAddIncorrectDueToIntersectionTimeSlot(FunctionalTester $I, \Codeception\Example $example)
+    public function testAddIncorrectDueToIntersectionTimeSlot(FunctionalTester $I, Example $example)
     {
         $doctor = $I->have(Doctor::class);
         $accessToken = $I->have(AccessToken::class, ['userId' => $doctor->userId]);
