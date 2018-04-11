@@ -180,3 +180,16 @@ the installed application. You only need to do these once for all.
 5. Create a new development test database and setup configuration for it under `common/config/test-local.php`.
 6. Apply migrations with console command `php yii migrate`. 
 7. Apply migrations to test db with console command `php yii_test migrate`. 
+
+
+
+FILLING BY TEST DATA
+---------------
+
+Now you have installed the application. But you have not any data in it.
+So you can fill the database by test data through fixtures:
+`php yii fixture "*"`
+Now you have three doctors and can test the web-interface:
+1. email: "pepe.luis@mail.com"  ---  password: "iampepe"
+2. email: "zizu@mail.com"       ---  password: "iamzizu"
+3. email: "h.gv@mail.com"       ---  password: "iamhosep"
