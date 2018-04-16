@@ -53,11 +53,27 @@ class TimeSlotService
             if ($identity->doctor == null) {
                 return false;
             }
-                if ($value != $identity->doctor->doctorId) {
-                    return false;
-                }
+            if ($value != $identity->doctor->doctorId) {
+                return false;
+            }
+
             return true;
         }
         throw new HttpException(401,'Unauthorized.');
+    }
+
+    /**
+     * @param string $doctorId
+     * @return array|null|\yii\db\ActiveRecord[] "list of slots" if doctorId specified in request headers
+     */
+    public function getListOfSlots(string $doctorId)
+    {
+        if ($doctorId) {
+            return TimeSlot::find()
+                ->where('doctorId='.$doctorId)
+                ->orderBy(['date' => SORT_ASC, 'start' => SORT_ASC])
+                ->all();
+        }
+        return array();
     }
 }

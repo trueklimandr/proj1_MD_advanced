@@ -36,7 +36,6 @@ class DoctorIndexActionCest extends BaseFunctionalCest
         $I->seeResponseIsJson();
         $response = json_decode($I->grabResponse());
         $I->assertEquals(3, count($response));
-        sleep(7);
         $I->seeResponseMatchesJsonType([
             'doctorId' => 'integer',
             'specialization' => 'string',

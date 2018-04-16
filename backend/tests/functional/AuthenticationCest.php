@@ -14,15 +14,13 @@ use backend\tests\functional\baseCest\BaseFunctionalCest;
 
 class AuthenticationCest extends BaseFunctionalCest
 {
-    // unauthorized user can't see list of doctors
-    public function testGettingListOfDocsByUnknownUser(FunctionalTester $I)
+    public function testUnauthorizedUserCanNotSeeListOfDoctors(FunctionalTester $I)
     {
         $I->sendGET('doctors');
         $I->seeResponseCodeIs(401);
     }
 
-    // authorized user can see list of doctors
-    public function testGettingListOfDocsByUser(FunctionalTester $I)
+    public function testAuthorizedUserCanSeeListOfDoctors(FunctionalTester $I)
     {
         $accessToken = $I->have(AccessToken::class);
         $I->amHttpAuthenticated($accessToken->token, '');

@@ -9,33 +9,34 @@
 namespace backend\controllers;
 
 use common\models\TimeSlot;
-use common\services\ListSlotService;
+use common\services\TimeSlotService;
 use Yii;
 use yii\base\Module;
 
 class TimeSlotController extends RestController
 {
     public $modelClass = TimeSlot::class;
-    private $listSlotService;
+
+    /** @var TimeSlotService $timeSlotService */
+    private $timeSlotService;
 
     public function __construct(
         string $id,
         Module $module,
-        ListSlotService $listSlotService,
-        array $config = [])
-    {
+        TimeSlotService $timeSlotService,
+        array $config = []
+    ) {
         parent::__construct($id, $module, $config);
-        $this->listSlotService = $listSlotService;
+        $this->timeSlotService = $timeSlotService;
     }
 
     /**
-     * @return array|null|\yii\db\ActiveRecord[] list of doctor's (specified in request header) slots
+     * @return TimeSlot[] list of doctor's (specified in request header) slots
      */
     public function actionList()
     {
-        $timeSlots = $this->listSlotService->getListOfSlots();
-        $response = Yii::$app->getResponse();
-        $response->setStatusCode(200);
+        $doctorId = Yii::$app->request->headers['doctorId'];
+        $timeSlots = $this->timeSlotService->getListOfSlots(is_numeric($doctorId) ? $doctorId : false);
         return $timeSlots;
     }
 }

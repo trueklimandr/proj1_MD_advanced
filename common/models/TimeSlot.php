@@ -24,19 +24,8 @@ use yii;
  */
 class TimeSlot extends ActiveRecord
 {
+    /** @var TimeSlotService $timeSlotService */
     private $timeSlotService;
-
-    /**
-     * connects a service for farther data verification
-     * @throws yii\base\InvalidConfigException
-     * @throws yii\di\NotInstantiableException
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->timeSlotService = Yii::$container->get(TimeSlotService::class);
-    }
 
     public static function tableName()
     {
@@ -83,9 +72,13 @@ class TimeSlot extends ActiveRecord
      * Check right position of start and end of a timeslot
      * @param $attribute string with start or end
      * @param $params
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\di\NotInstantiableException
      */
     public function validateSlot($attribute, $params)
     {
+        $this->timeSlotService = Yii::$container->get(TimeSlotService::class);
+
         if (!$this->timeSlotService->isStartBeforeEnd($this->start, $this->end)) {
             $this->addError($attribute, 'Start must be earlier than end.');
         }
@@ -98,9 +91,14 @@ class TimeSlot extends ActiveRecord
      * Check doctorId for its owner and for its existence
      * @param $attribute string with doctorId
      * @param $params
+     * @throws yii\base\InvalidConfigException
+     * @throws yii\di\NotInstantiableException
+     * @throws yii\web\HttpException
      */
     public function validateDoctor($attribute, $params)
     {
+        $this->timeSlotService = Yii::$container->get(TimeSlotService::class);
+
         if (!$this->timeSlotService->isValidDoctor($this->$attribute)) {
             $this->addError($attribute, 'You can create new slot for yourself only.');
         }

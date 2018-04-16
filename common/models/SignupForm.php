@@ -47,7 +47,7 @@ class SignupForm extends Model
      *
      * @return bool|User
      */
-    public function Signup()
+    public function SignUp()
     {
         if (!$this->validate()) {
             return false;
