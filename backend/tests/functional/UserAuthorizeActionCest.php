@@ -25,8 +25,8 @@ class UserAuthorizeActionCest extends BaseFunctionalCest
             'type' => 'user',
         ]);
         $I->sendPOST('users/authorize', [
-            'email' => 'd.kozlov@mail.ru',
-            'password' => 'parol-karol'
+                'email' => 'd.kozlov@mail.ru',
+                'password' => 'parol-karol'
             ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseIsJson();

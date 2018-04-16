@@ -121,7 +121,7 @@ class MainController extends Controller
      *
      * @return string|\yii\web\Response
      */
-    public function actionSignup()
+    public function actionSignUp()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
