@@ -1,3 +1,6 @@
+# nginx logs
+/log
+
 # yii console commands
 /yii
 /yii_test
